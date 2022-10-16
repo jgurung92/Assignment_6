@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 6 Homework</title>
+<style>* { font-family: monospace; }</style>
+<script>
+//-----------------------//
+// Structuring a dataset //
+//-----------------------//
+console.log("Structuring a dataset");
+
+// Skip.
+
+
+
+//----------------//
+// Creating a set //
+//----------------//
+console.log("Creating a set");
+
+// 1. Implement the set data structure using the prototype (as opposed to the
+//    version we wrote in class).
+function Set() {
+  this.items = {};
+}
+
+Set.prototype.add = function(value) {
+  if (!this.has(value)) {
+    this.items[value] = value;
+    return true;
+  }
+  return false;
+};
+
+Set.prototype.delete = function(value) {
+  if (this.has(value)) {
+    delete this.items[value];
+    return true;
+  }
+  return false;
+};
+
+Set.prototype.has = function(value) {
+  return this.items.hasOwnProperty(value);
+};
+
+Set.prototype.clear = function() {
+  this.items = {};
+};
+
+Set.prototype.size = function() {
+  return Object.keys(this.items).length;
+};
+
+Set.prototype.values = function() {
+  var values = [];
+  
+  for (var i=0, keys = Object.keys(this.items); i<keys.length; i++) {
+    values.push(this.items[keys[i]]);
+  }
+  return values;
+};
+
+var set = new Set();
+set.add(1);
+set.add(2);
+set.add(3);
+set.delete(2);
+console.log((set.has(3)) === true);
+console.log((set.size()) === 2);
+console.log(set.values());
+set.clear();
+console.log(set.values());
+
+
+
+//----------------//
+// Set operations //
+//----------------//
+console.log("Set operations");
+
+// 1. Implement the union set function using the prototype.
+
+Set.prototype.union = function(otherSet) {
+  var unionSet = new Set();
+  var values = this.values();
+  for (var i=0; i < values.length; i++) {
+    unionSet.add(values[i]);
+  }
+  var values =  otherSet.values();
+  for (var i=0; i < values.length; i++) {
+    unionSet.add(values[i]);
+  }
+  return unionSet;
+  };
+
+// 2. Implement the intersection set function using the prototype.
+
+Set.prototype.intersection = function(otherSet) {
+    var intersectionSet = new Set();
+    var values = this.values();
+
+    for (var i=0; i < values.length; i++) {
+      if ( otherSet.has(values[i])) {
+        intersectionSet.add(values[i]);
+      }
+    }
+    return intersectionSet;
+  };
+
+// 3. Implement the set difference function using the prototype.
+
+Set.prototype.difference = function(otherSet) {
+    var differenceSet = new Set();
+    var values = this.values();
+    for (var i = 0; i < values.length; i++) {
+      if (!otherSet.has(values[i])) {
+        // value is not in the other set
+        differenceSet.add(values[i]);
+      }
+    }
+    return differenceSet;
+  };
+
+// 4. Implement the subset function using the prototype.
+
+Set.prototype.subset = function(otherSet) {
+    if (this.size() > otherSet.size()) {
+      return false;
+    }
+    else {
+      var values = this.values();
+      for (var i = 0; i < values.length; i++) {
+        if (!otherSet.has(values[i])) {
+          // value is not in the other set
+          // so it cannot be a subset
+          return false;
+        }
+      }
+      return true;
+    }
+  };
+
+//---------------------//
+// ES6 – the Set class //
+//---------------------//
+console.log("ES6 - the Set class");
+
+// Skip.
+
+
+
+//---------//
+// Project //
+//---------//
+console.log("Project");
+
+// A professor keeps attendence of classes with the following results:
+// All students: Mary, Joe, Tim, Rosalee, Vincent, Caroline
+// Class 1: Rosalee, Joe, Mary, Tim
+// Class 2: Mary, Tim, Vincent, Rosalee, Caroline
+// Class 3: Caroline, Tim, Vincent, Rosalee, Joe
+
+// 1. Create a set of students for each class.
+var allStudents = new Set();
+allStudents.add("Mary");
+allStudents.add("Joe");
+allStudents.add("Tim");
+allStudents.add("Rosalee");
+allStudents.add("Vincent");
+allStudents.add("Caroline");
+
+
+var setA = new Set();
+setA.add("Rosalee");
+setA.add("Joe");
+setA.add("Mary");
+setA.add("Tim");
+
+var setB = new Set();
+setB.add("Mary");
+setB.add("Tim");
+setB.add("Vincent");
+setB.add("Rosalee");
+setB.add("Caroline");
+
+var setC = new Set();
+setC.add("Caroline");
+setC.add("Tim");
+setC.add("Vincent");
+setC.add("Rosalee");
+setC.add("Joe");
+
+//console.log(setA.values());
+//console.log(setB.values());
+//console.log(setC.values());
+
+
+// 2. Use set operations to get a list of students that attended at least
+//    one class.
+var setUnionABC = setA.union(setB).union(setC);
+console.log(setUnionABC.values());
+
+// 3. Use set operations to get a list of students that attended all classes.
+var setIntersectionABC = setA.intersection(setB).intersection(setC);
+console.log(setIntersectionABC.values());
+
+// 4. Show that the results for (2) and (3) are a subset of all students.
+console.log(setUnionABC.subset(allStudents));
+console.log(setIntersectionABC.subset(allStudents));
+
+
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>
